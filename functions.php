@@ -23,5 +23,19 @@ function minnie_setup() {
 		array( 'aside', 'image', 'video', 'quote', 'link', 'audio', 'gallery', 'status' )
 	);
 }
-
 add_action( 'after_setup_theme', 'minnie_setup' );
+
+
+/**
+ * Register to the Bridge plugin
+ *
+ * @param   array $client_ids Client IDs.
+ * @wp_hook filter bridge_client_ids
+ * @return  array
+ */
+function minnie_register_to_bridge( $client_ids ) {
+	$client_ids[] = 'minnie';
+
+	return $client_ids;
+}
+add_filter( 'bridge_client_ids', 'minnie_register_to_bridge' );
