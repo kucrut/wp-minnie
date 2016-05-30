@@ -39,3 +39,25 @@ function minnie_register_to_bridge( $client_ids ) {
 	return $client_ids;
 }
 add_filter( 'bridge_client_ids', 'minnie_register_to_bridge' );
+
+
+/**
+ * Filter preview post link
+ *
+ * Structure: <domain>/preview/<post-type>/<post-id>
+ *
+ * @param  string  $link Original preview link.
+ * @param  WP_Post $post Post object.
+ * @return string
+ */
+function minnie_filter_post_link( $link, WP_Post $post ) {
+	$link = sprintf(
+		'%s/preview/%s/%d',
+		home_url(),
+		$post->post_type,
+		$post->ID
+	);
+
+	return $link;
+}
+add_filter( 'preview_post_link', 'minnie_filter_post_link', 10, 2 );
