@@ -83,3 +83,14 @@ function minnie_image_custom_attributes( $attr, $attachment, $size ) {
 	return $attr;
 }
 add_filter( 'wp_get_attachment_image_attributes', 'minnie_image_custom_attributes', 10, 3 );
+
+
+/**
+ * Set maximum srcset image width
+ *
+ * @return int
+ */
+function minnie_max_srcset_image_width() {
+	return 2880;
+}
+add_filter( 'max_srcset_image_width', 'minnie_max_srcset_image_width' );
