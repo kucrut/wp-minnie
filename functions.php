@@ -22,6 +22,15 @@ function minnie_setup() {
 		'post-formats',
 		array( 'aside', 'image', 'video', 'quote', 'link', 'audio', 'gallery', 'status' )
 	);
+
+	/*
+	 * Enable support for HTML5's gallery markup.
+	 * See http://codex.wordpress.org/Post_Formats
+	 */
+	add_theme_support(
+		'html5',
+		array( 'gallery' )
+	);
 }
 add_action( 'after_setup_theme', 'minnie_setup' );
 
