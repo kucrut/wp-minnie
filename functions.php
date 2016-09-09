@@ -1,6 +1,37 @@
 <?php
 
 /**
+ * Register HiDPI image sizes
+ *
+ * @global array $_wp_additional_image_sizes
+ */
+function minnie_add_hidpi_image_sizes() {
+	global $_wp_additional_image_sizes;
+
+	foreach ( $_wp_additional_image_sizes as $size => $props ) {
+		$new_size = array(
+			"${size}-2x",
+			( intval( $props['width'] ) * 2 ),
+			( intval( $props['height'] ) * 2 ),
+			$props['crop'],
+		);
+
+		call_user_func_array( 'add_image_size', $new_size );
+	}
+
+	foreach ( array( 'thumbnail', 'medium', 'large' ) as $size ) {
+		$new_size = array(
+			"${size}-2x",
+			( intval( get_option( "${size}_size_w" ) ) * 2 ),
+			( intval( get_option( "${size}_size_h" ) ) * 2 ),
+			get_option( "${size}_crop" ),
+		);
+
+		call_user_func_array( 'add_image_size', $new_size );
+	}
+}
+
+/**
  * Setup Minnie Theme
  *
  * @wp_hook action after_setup_theme
@@ -31,6 +62,8 @@ function minnie_setup() {
 		'html5',
 		array( 'gallery' )
 	);
+
+	minnie_add_hidpi_image_sizes();
 }
 add_action( 'after_setup_theme', 'minnie_setup' );
 
