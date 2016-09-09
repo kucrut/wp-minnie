@@ -127,3 +127,74 @@ function minnie_max_srcset_image_width() {
 	return 2880;
 }
 add_filter( 'max_srcset_image_width', 'minnie_max_srcset_image_width' );
+
+
+/**
+ * Image size names
+ *
+ * @global array $_wp_additional_image_sizes
+ *
+ * @param array $sizes Image sizes
+ *
+ * @return array
+ */
+function minnie_image_size_names( $sizes ) {
+	global $_wp_additional_image_sizes;
+
+	foreach ( $_wp_additional_image_sizes as $name => $props ) {
+		// If the name is already added, skip.
+		if ( ! empty( $sizes[ $name ] ) ) {
+			continue;
+		}
+
+		$pos = strrpos( $name, '-2x', -3 );
+
+		// If this is not the size we added, skip.
+		if ( false === $pos ) {
+			continue;
+		}
+
+		$orig_name = substr( $name, 0, $pos );
+
+		// If the size doesn't have a name, skip.
+		if ( empty( $sizes[ $orig_name ] ) ) {
+			continue;
+		}
+
+		$sizes[ $name ] = sprintf( esc_html__( '%s @ 2x', 'minnie' ), $sizes[ $orig_name ] );
+	}
+
+	return $sizes;
+}
+add_filter( 'image_size_names_choose', 'minnie_image_size_names', 99 );
+
+
+/**
+ * Add `data-zoom` attribute to image linked to its original file
+ *
+ * @param string       $html    The image HTML markup to send.
+ * @param int          $id      The attachment id.
+ * @param string       $caption The image caption.
+ * @param string       $title   The image title.
+ * @param string       $align   The image alignment.
+ * @param string       $url     The image source URL.
+ * @param string|array $size    Size of image. Image size or array of width and height values
+ *                              (in that order). Default 'medium'.
+ * @param string       $alt     The image alternative, or alt, text.
+ *
+ * @return string
+ */
+function minnie_filter_image_send_to_editor( $html, $id, $caption, $title, $align, $url, $size, $alt ) {
+	if ( ! $url ) {
+		return $html;
+	}
+
+	$upload_dir = wp_upload_dir();
+
+	if ( false !== strpos( $url, $upload_dir['baseurl'] ) ) {
+		$html = str_replace( '<a', '<a data-zoom="1"', $html );
+	}
+
+	return $html;
+}
+add_filter( 'image_send_to_editor', 'minnie_filter_image_send_to_editor', 1, 8 );
