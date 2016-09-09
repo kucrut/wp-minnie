@@ -70,3 +70,16 @@ function minnie_filter_post_link( $link, WP_Post $post ) {
 	return $link;
 }
 add_filter( 'preview_post_link', 'minnie_filter_post_link', 10, 2 );
+
+
+/**
+ * Add custom attributes to images
+ */
+function minnie_image_custom_attributes( $attr, $attachment, $size ) {
+	$meta = wp_get_attachment_metadata( $attachment->ID );
+	$attr['data-ow'] = $meta['width'];
+	$attr['data-oh'] = $meta['height'];
+
+	return $attr;
+}
+add_filter( 'wp_get_attachment_image_attributes', 'minnie_image_custom_attributes', 10, 3 );
