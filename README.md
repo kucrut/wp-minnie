@@ -2,6 +2,9 @@
 Blank theme for [Minnie](https://github.com/kucrut/minnie).
 
 ## Changelog
+### 0.3.1
+* Fix notice
+
 ### 0.3.0
 * Enable support for HTML5's gallery markup
 * Add custom attributes to images
