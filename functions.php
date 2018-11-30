@@ -8,7 +8,7 @@
 function minnie_add_hidpi_image_sizes() {
 	global $_wp_additional_image_sizes;
 
-	foreach ( $_wp_additional_image_sizes as $size => $props ) {
+	foreach ( (array) $_wp_additional_image_sizes as $size => $props ) {
 		$new_size = array(
 			"${size}-2x",
 			( intval( $props['width'] ) * 2 ),
